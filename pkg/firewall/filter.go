@@ -20,6 +20,7 @@ var FilterOpts = api.ReqOpts{
 // Data structs
 
 type Filter struct {
+	UUID                     string              `json:"uuid"`
 	Enabled                  string              `json:"enabled"`
 	SortOrder                string              `json:"sort_order"`
 	Sequence                 string              `json:"sequence"`
@@ -28,6 +29,7 @@ type Filter struct {
 	Description              string              `json:"description"`
 	InvertInterface          string              `json:"interfacenot"`
 	Interface                api.SelectedMapList `json:"interface"`
+	InterfaceNames           api.SelectedMapList `json:"%interface"`
 	Quick                    string              `json:"quick"`
 	Action                   api.SelectedMap     `json:"action"`
 	AllowOptions             string              `json:"allowopts"`
@@ -35,6 +37,7 @@ type Filter struct {
 	IPProtocol               api.SelectedMap     `json:"ipprotocol"`
 	Protocol                 api.SelectedMap     `json:"protocol"`
 	ICMPType                 api.SelectedMapList `json:"icmptype"`
+	ICMP6Type                api.SelectedMapList `json:"icmp6type"`
 	SourceInvert             string              `json:"source_not"`
 	SourceNet                string              `json:"source_net"`
 	SourcePort               string              `json:"source_port"`
@@ -44,6 +47,7 @@ type Filter struct {
 	Log                      string              `json:"log"`
 	TCPFlags                 api.SelectedMapList `json:"tcpflags1"`
 	TCPFlagsOutOf            api.SelectedMapList `json:"tcpflags2"`
+	TCPFlagsAny              string              `json:"tcpflags_any"`
 	Schedule                 api.SelectedMap     `json:"sched"`
 	StateType                api.SelectedMap     `json:"statetype"`
 	StatePolicy              api.SelectedMap     `json:"state-policy"`
@@ -64,6 +68,7 @@ type Filter struct {
 	DisableReplyTo           string              `json:"disablereplyto"`
 	ReplyTo                  api.SelectedMap     `json:"replyto"`
 	MatchPriority            api.SelectedMap     `json:"prio"`
+	PriorityGroup            string              `json:"prio_group"`
 	SetPriority              api.SelectedMap     `json:"set-prio"`
 	SetPriorityLowDelay      api.SelectedMap     `json:"set-prio-low"`
 	MatchTOS                 api.SelectedMap     `json:"tos"`

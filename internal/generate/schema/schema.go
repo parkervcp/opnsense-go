@@ -48,12 +48,12 @@ func (a *AttrData) UnmarshalYAML(unmarshal func(interface{}) error) error {
 type ResourceData struct {
 	Name      string `yaml:"name"`
 	Filename  string `yaml:"filename"`
-	Monad     string `yaml:"monad"`
+	Monad     string `yaml:"monad,omitempty"`
 	Endpoints struct {
-		Add         string `yaml:"add"`
-		Get         string `yaml:"get"`
-		Update      string `yaml:"update"`
-		Delete      string `yaml:"delete"`
+		Add         string `yaml:"add,omitempty"`
+		Get         string `yaml:"get,omitempty"`
+		Update      string `yaml:"update,omitempty"`
+		Delete      string `yaml:"delete,omitempty"`
 		Reconfigure string `yaml:"reconfigure,omitempty"`
 	}
 	ReadOnly    bool `yaml:"readOnly"`

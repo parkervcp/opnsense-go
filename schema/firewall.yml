@@ -2,6 +2,38 @@
 name: firewall
 reconfigureEndpoint: "" # Controller-wide reconfigure endpoint (can be overwritten)
 resources:
+  - name: Shared
+    filename: shared
+    readOnly: true
+    endpoints:
+      reconfigure: "null"
+    customTypes:
+      RuleCategoryColors:
+        - name: Color
+          type: string
+          key: color
+        - name: Name
+          type: string
+          key: name
+        - name: UUID
+          type: string
+          key: uuid
+      RuleAliasMeta:
+        - name: Value
+          type: string
+          key: value
+        - name: Name
+          type: string
+          key: '%value'
+        - name: IsAlias
+          type: bool
+          key: isAlias
+        - name: Description
+          type: string
+          key: description
+        - name: Summary
+          type: string
+          key: summary
 
   # os-firewall resources
 
@@ -15,6 +47,9 @@ resources:
       delete: "/firewall/filter/delRule"
       reconfigure: "/firewall/filter/apply"
     attrs:
+      - name: UUID
+        type: string
+        key: uuid
       - name: Enabled
         type: string
         key: enabled
@@ -39,6 +74,9 @@ resources:
       - name: Interface
         type: SelectedMapList
         key: interface
+      - name: InterfaceNames
+        type: SelectedMapList
+        key: '%interface'
       - name: Quick
         type: string
         key: quick
@@ -60,6 +98,9 @@ resources:
       - name: ICMPType
         type: SelectedMapList
         key: icmptype
+      - name: ICMP6Type
+        type: SelectedMapList
+        key: icmp6type
       - name: SourceInvert
         type: string
         key: source_not
@@ -87,6 +128,9 @@ resources:
       - name: TCPFlagsOutOf
         type: SelectedMapList
         key: tcpflags2
+      - name: TCPFlagsAny
+        type: string
+        key: tcpflags_any
       - name: Schedule
         type: SelectedMap
         key: sched
@@ -147,6 +191,9 @@ resources:
       - name: MatchPriority
         type: SelectedMap
         key: prio
+      - name: PriorityGroup
+        type: string
+        key: prio_group
       - name: SetPriority
         type: SelectedMap
         key: set-prio
@@ -221,6 +268,18 @@ resources:
       - name: Description
         type: string
         key: description
+
+  - name: DNAT
+    filename: dnat
+    monad: rule
+    endpoints:
+      add: "/firewall/d_nat/addRule"
+      get: "/firewall/d_nat/getRule"
+      update: "/firewall/d_nat/setRule"
+      delete: "/firewall/d_nat/delRule"
+      reconfigure: "/firewall/source_nat/apply"
+    attrs:
+
 
   - name: NatOneToOne
     filename: nat_one_to_one
@@ -338,3 +397,538 @@ resources:
       - name: Color
         type: string
         key: color
+
+rpc:
+  - name: "Rules"
+    filename: rules
+    customTypes:
+      RulesInfoResponse:
+        - name: Total
+          type: int
+          key: total
+        - name: RowCount
+          type: int
+          key: rowCount
+        - name: Current
+          type: int
+          key: current
+        - name: Rules
+          type: '[]RuleInfo'
+          key: rows
+      RuleInfo:
+        - name: UUID
+          type: string
+          key: uuid
+        - name: Enabled
+          type: string
+          key: enabled
+        - name: StateType
+          type: SelectedMap
+          key: statetype
+        - name: StateTypeName
+          type: SelectedMap
+          key: '%statetype'
+        - name: StatePolicy
+          type: SelectedMap
+          key: state-policy
+        - name: Sequence
+          type: string
+          key: sequence
+        - name: SortOrder
+          type: string
+          key: sort_order
+        - name: PriorityGroup
+          type: string
+          key: prio_group
+        - name: Action
+          type: SelectedMap
+          key: action
+        - name: Quick
+          type: string
+          key: quick
+        - name: InvertInterface
+          type: string
+          key: interfacenot
+        - name: Interface
+          type: SelectedMapList
+          key: interface
+        - name: InterfaceName
+          type: SelectedMapList
+          key: '%interface'
+        - name: Direction
+          type: SelectedMap
+          key: direction
+        - name: DirectionName
+          type: SelectedMap
+          key: '%direction'
+        - name: IPProtocol
+          type: SelectedMap
+          key: ipprotocol
+        - name: IPProtocolName
+          type: SelectedMap
+          key: '%ipprotocol'
+        - name: Protocol
+          type: SelectedMap
+          key: protocol
+        - name: ICMPType
+          type: SelectedMapList
+          key: icmptype
+        - name: ICMP6Type
+          type: SelectedMapList
+          key: icmp6type
+        - name: SourceNet
+          type: string
+          key: source_net
+        - name: SourceNetName
+          type: string
+          key: source_net
+        - name: SourceInvert
+          type: string
+          key: source_not
+        - name: SourcePort
+          type: string
+          key: source_port
+        - name: DestinationNet
+          type: string
+          key: destination_net
+        - name: DestinationInvert
+          type: string
+          key: destination_not
+        - name: DestinationPort
+          type: string
+          key: destination_port
+        - name: DivertTo
+          type: string
+          key: divert-to
+        - name: DivertToName
+          type: string
+          key: '%divert-to'
+        - name: Gateway
+          type: SelectedMap
+          key: gateway
+        - name: ReplyTo
+          type: SelectedMap
+          key: replyto
+        - name: DisableReplyTo
+          type: string
+          key: disablereplyto
+        - name: Log
+          type: string
+          key: log
+        - name: AllowOptions
+          type: string
+          key: allowopts
+        - name: NoXMLRPCSync
+          type: string
+          key: nosync
+        - name: NoPfsync
+          type: string
+          key: nopfsync
+        - name: StateTimeout
+          type: string
+          key: statetimeout
+        - name: UDPFirst
+          type: string
+          key: udp-first
+        - name: UDPMultiple
+          type: string
+          key: udp-multiple
+        - name: UDPSingle
+          type: string
+          key: udp-single
+        - name: MaxSourceNodes
+          type: string
+          key: max-src-nodes
+        - name: MaxSourceStates
+          type: string
+          key: max-src-states
+        - name: MaxSourceConnections
+          type: string
+          key: max-src-conn
+        - name: MaxStates
+          type: string
+          key: max
+        - name: MaxNewConnectionsCount
+          type: string
+          key: max-src-conn-rate
+        - name: MaxNewConnectionsSeconds
+          type: string
+          key: max-src-conn-rates
+        - name: OverloadTable
+          type: SelectedMap
+          key: overload
+        - name: AdaptiveTimeoutsStart
+          type: string
+          key: adaptivestart
+        - name: AdaptiveTimeoutsEnd
+          type: string
+          key: adaptiveend
+        - name: MatchPriority
+          type: SelectedMap
+          key: prio
+        - name: SetPriority
+          type: SelectedMap
+          key: set-prio
+        - name: SetPriorityLowDelay
+          type: SelectedMap
+          key: set-prio-low
+        - name: SetLocalTag
+          type: string
+          key: tag
+        - name: MatchLocalTag
+          type: string
+          key: tagged
+        - name: TCPFlags
+          type: SelectedMapList
+          key: tcpflags1
+        - name: TCPFlagsOutOf
+          type: SelectedMapList
+          key: tcpflags2
+        - name: TCPFlagsAny
+          type: string
+          key: tcpflags_any
+        - name: Categories
+          type: SelectedMapList
+          key: categories
+        - name: CategoriesNames
+          type: SelectedMapList
+          key: '%categories'
+        - name: Schedule
+          type: SelectedMap
+          key: sched
+        - name: MatchTOS
+          type: SelectedMap
+          key: tos
+        - name: TrafficShaper
+          type: SelectedMap
+          key: shaper1
+        - name: TrafficShaperReverse
+          type: SelectedMap
+          key: shaper2
+        - name: Description
+          type: string
+          key: description
+        - name: SourceAliasMeta
+          type: '[]RuleAliasMeta'
+          key: alias_meta_source_net
+        - name: SourcePortMeta
+          type: '[]RuleAliasMeta'
+          key: alias_meta_source_port
+        - name: DestinationAliasMeta
+          type: '[]RuleAliasMeta'
+          key: alias_meta_destination_net
+        - name: DestinationPortMeta
+          type: '[]RuleAliasMeta'
+          key: alias_meta_destination_port
+        - name: CategoryColors
+          type: '[]RuleCategoryColors'
+          key: category_colors
+    rpc_calls:
+      - name: "Get"
+        method: "GET"
+        endpoint: "/firewall/filter/search_rule"
+        result_type: "RulesInfoResponse"
+
+  - name: "Categories"
+    filename: categories
+    customTypes:
+      CategoriesResponse:
+        - name: Total
+          type: int
+          key: total
+        - name: RowCount
+          type: int
+          key: rowCount
+        - name: Current
+          type: int
+          key: current
+        - name: Categories
+          type: '[]CategoryInfo'
+          key: rows
+      CategoryInfo:
+        - name: UUID
+          type: string
+          key: uuid
+        - name: Name
+          type: string
+          key: name
+        - name: Auto
+          type: string
+          key: auto
+        - name: Color
+          type: string
+          key: color
+    rpc_calls:
+      - name: "Get"
+        method: "GET"
+        endpoint: "/firewall/category/search_item"
+        result_type: "CategoriesResponse"
+
+  - name: "Aliases"
+    filename: aliases
+    customTypes:
+      AliasesResponse:
+        - name: Total
+          type: int
+          key: total
+        - name: RowCount
+          type: int
+          key: rowCount
+        - name: Current
+          type: int
+          key: current
+        - name: Aliases
+          type: '[]AliasInfo'
+          key: rows
+      AliasInfo:
+        - name: UUID
+          type: string
+          key: uuid
+        - name: Enabled
+          type: string
+          key: enabled
+        - name: Name
+          type: string
+          key: name
+        - name: Type
+          type: string
+          key: type
+        - name: TypeName
+          type: string
+          key: '%type'
+        - name: Proto
+          type: string
+          key: proto
+        - name: Interface
+          type: string
+          key: interface
+        - name: Counters
+          type: string
+          key: counters
+        - name: UpdateFreq
+          type: string
+          key: updatefreq
+        - name: Content
+          type: string
+          key: content
+        - name: Password
+          type: string
+          key: password
+        - name: Username
+          type: string
+          key: username
+        - name: AuthType
+          type: string
+          key: authtype
+        - name: Expire
+          type: string
+          key: expires
+        - name: Categories
+          type: SelectedMapList
+          key: categories
+        - name: CategoryNames
+          type: SelectedMapList
+          key: '%categories'
+        - name: LastUpdated
+          type: string
+          key: last_updated
+        - name: EvalNoMatch
+          type: string
+          key: eval_nomatch
+        - name: EvalMatch
+          type: string
+          key: eval_match
+        - name: InBlockP
+          type: string
+          key: in_block_p
+        - name: InBlockB
+          type: string
+          key: in_block_b
+        - name: InPassP
+          type: string
+          key: in_pass_p
+        - name: InPassB
+          type: string
+          key: in_pass_b
+        - name: OutBlockP
+          type: string
+          key: out_block_p
+        - name: OutBlockB
+          type: string
+          key: out_block_b
+        - name: OutPassP
+          type: string
+          key: out_pass_p
+        - name: OutPassB
+          type: string
+          key: out_pass_b
+        - name: Description
+          type: string
+          key: description
+        - name: CategoryUUID
+          type: '[]string'
+          key: categories_uuid
+    rpc_calls:
+      - name: "Get"
+        method: "GET"
+        endpoint: "/firewall/alias/search_item"
+        result_type: "AliasesResponse"
+
+  - name: "DestinationNAT"
+    filename: dnat
+    customTypes:
+      DNATResponse:
+        - name: Total
+          type: int
+          key: total
+        - name: RowCount
+          type: int
+          key: rowCount
+        - name: Current
+          type: int
+          key: current
+        - name: DNATs
+          type: '[]DNATInfo'
+          key: rows
+      DNATInfo:
+        - name: UUID
+          type: string
+          key: uuid
+        - name: Sequence
+          type: string
+          key: sequence
+        - name: Disabled
+          type: string
+          key: disabled
+        - name: NoRDR
+          type: string
+          key: nordr
+        - name: Interface
+          type: string
+          key: interface
+        - name: InterfaceName
+          type: string
+          key: '%interface'
+        - name: IPProtocol
+          type: string
+          key: ipprotocol
+        - name: IPProtocolName
+          type: string
+          key: '%ipprotocol'
+        - name: Protocol
+          type: string
+          key: protocol
+        - name: ProtocolName
+          type: string
+          key: '%protocol'
+        - name: SourceNetwork
+          type: string
+          key: source.network
+        - name: SourceAddress
+          type: string
+          key: source.address
+        - name: SourcePort
+          type: string
+          key: source.port
+        - name: SourceInvert
+          type: string
+          key: source.not
+        - name: DestinationNetwork
+          type: string
+          key: destination.network
+        - name: DestinationNetworkName
+          type: string
+          key: '%destination.network'
+        - name: DestinationAddress
+          type: string
+          key: destination.address
+        - name: DestinationPort
+          type: string
+          key: destination.port
+        - name: DestinationInvert
+          type: string
+          key: destination.not
+        - name: Target
+          type: string
+          key: target
+        - name: LocalPort
+          type: string
+          key: local-port
+        - name: PoolOpts
+          type: string
+          key: poolopts
+        - name: Log
+          type: string
+          key: log
+        - name: Category
+          type: SelectedMapList
+          key: category
+        - name: CategoryNames
+          type: SelectedMapList
+          key: '%category'
+        - name: Categories
+          type: SelectedMapList
+          key: categories
+        - name: Description
+          type: string
+          key: descr
+        - name: SetTag
+          type: string
+          key: tag
+        - name: MatchTag
+          type: string
+          key: tagged
+        - name: NoXMLRPCSync
+          type: string
+          key: nosync
+        - name: NATReflection
+          type: string
+          key: natreflection
+        - name: Pass
+          type: string
+          key: pass
+        - name: PassName
+          type: string
+          key: '%pass'
+        - name: AssociatedRuleID
+          type: string
+          key: associated-rule-id
+        - name: CreatedByUsername
+          type: string
+          key: created.username
+        - name: CreatedAt
+          type: string
+          key: created.time
+        - name: CreatedDescription
+          type: string
+          key: created.description
+        - name: UpdatedByUsername
+          type: string
+          key: updated.username
+        - name: UpdatedAt
+          type: string
+          key: updated.time
+        - name: UpdatedDescription
+          type: string
+          key: updated.description
+        - name: CategoryColors
+          type: '[]RuleCategoryColors'
+          key: category_colors
+        - name: DestinationAliasMeta
+          type: '[]RuleAliasMeta'
+          key: alias_meta_destination.network"
+        - name: DestinationPortMeta
+          type: '[]RuleAliasMeta'
+          key: alias_meta_destination.port
+        - name: TargetAliasMeta
+          type: '[]RuleAliasMeta'
+          key: alias_meta_target
+        - name: LocalPortMeta
+          type: '[]RuleAliasMeta'
+          key: alias_meta_local-port
+    rpc_calls:
+      # the dnat/search_rule endpoint returns an array of all available d_nat rules
+      - name: "Get"
+        method: "GET"
+        endpoint: "/firewall/d_nat/search_rule"
+        result_type: "DNATResponse"
