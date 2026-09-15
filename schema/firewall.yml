@@ -838,7 +838,7 @@ rpc:
           key: destination.network
         - name: DestinationNetworkName
           type: string
-          key: '%destination.network'
+          key: 'destination.%network'
         - name: DestinationAddress
           type: string
           key: destination.address
