@@ -27,7 +27,7 @@ type DNATInfo struct {
 	SourcePort             string               `json:"source.port"`
 	SourceInvert           string               `json:"source.not"`
 	DestinationNetwork     string               `json:"destination.network"`
-	DestinationNetworkName string               `json:"%destination.network"`
+	DestinationNetworkName string               `json:"destination.%network"`
 	DestinationAddress     string               `json:"destination.address"`
 	DestinationPort        string               `json:"destination.port"`
 	DestinationInvert      string               `json:"destination.not"`
@@ -70,13 +70,15 @@ type DNATResponse struct {
 func (c *Controller) DestinationNATGet(ctx context.Context) (*DNATResponse, error) {
 
 	callParams := []string{}
+	queryParams := make(map[string]string)
 	bodyParams := make(map[string]interface{})
 
 	callOpts := api.RPCOpts{
-		BaseEndpoint:   "/firewall/d_nat/search_rule",
-		Method:         "GET",
-		PathParameters: callParams,
-		BodyParameters: bodyParams,
+		BaseEndpoint:    "/firewall/d_nat/search_rule",
+		Method:          "GET",
+		PathParameters:  callParams,
+		QueryParameters: queryParams,
+		BodyParameters:  bodyParams,
 	}
 
 	resultData := &DNATResponse{}

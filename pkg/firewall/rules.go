@@ -94,13 +94,15 @@ type RulesInfoResponse struct {
 func (c *Controller) RulesGet(ctx context.Context) (*RulesInfoResponse, error) {
 
 	callParams := []string{}
+	queryParams := make(map[string]string)
 	bodyParams := make(map[string]interface{})
 
 	callOpts := api.RPCOpts{
-		BaseEndpoint:   "/firewall/filter/search_rule",
-		Method:         "GET",
-		PathParameters: callParams,
-		BodyParameters: bodyParams,
+		BaseEndpoint:    "/firewall/filter/search_rule",
+		Method:          "GET",
+		PathParameters:  callParams,
+		QueryParameters: queryParams,
+		BodyParameters:  bodyParams,
 	}
 
 	resultData := &RulesInfoResponse{}
